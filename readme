@@ -1,0 +1,92 @@
+Model Training Notebook for Identifying CEX/Bridge Addresses on the Optimism Blockchain.
+
+This package contains the code and process for training machine learning models to identify Centralized Exchange (CEX) and Bridge addresses on the Optimism blockchain. The goal is to classify addresses based on their on-chain behavior using supervised and unsupervised learning techniques.
+
+Overview
+The notebook is structured as follows:
+
+Data Loading:
+Loads the raw transaction data (nativetx_df, tokentx_df) and labeled addresses (seed_df).
+The data includes native ETH transactions and token transactions, along with a list of pre-labeled addresses (CEX/Bridge vs. others).
+
+Data Preprocessing:
+Filters active addresses from the seed dataset that are present in the transaction data.
+Generates features such as transaction volume, unique interactions, transaction count, and cluster participation.
+Prepares the training dataset by merging the active addresses with their corresponding labels.
+
+Model Training:
+
+Trains three models:
+Random Forest Classifier: A supervised learning model for classification.
+Logistic Regression: Another supervised learning model for binary classification.
+Isolation Forest: An unsupervised learning model for anomaly detection.
+
+Evaluates model performance using metrics such as accuracy, F1-score, ROC-AUC, and confusion matrices.
+
+Addresses class imbalance using resampling techniques like SMOTETomek.
+
+Model Evaluation:
+Evaluates the models on both validation and test sets.
+Compares the performance of the Random Forest, Logistic Regression, and Isolation Forest models.
+Identifies incorrectly flagged addresses and analyzes model predictions.
+
+Testing on New Data:
+Prepares test data from the nativetx_df and tokentx_df datasets.
+Applies the best-performing model (Random Forest) to classify new addresses.
+Saves the predictions for further analysis.
+
+Key Features
+Feature Engineering: The notebook generates relevant features from raw transaction data, such as transaction volume, activity duration, and cluster size.
+
+Class Imbalance Handling: Uses SMOTETomek to address the class imbalance problem, improving the performance of supervised models.
+
+Model Comparison: Compares the performance of supervised (Random Forest, Logistic Regression) and unsupervised (Isolation Forest) models.
+
+Anomaly Detection: The Isolation Forest model is used to detect anomalous behavior, which could indicate CEX/Bridge activity.
+
+Prediction Export: Predictions are saved to CSV files for further analysis or integration into other systems.
+
+Usage
+Prerequisites
+Python 3.10 or higher.
+
+Required Python libraries: pandas, numpy, scikit-learn, imbalanced-learn, joblib.
+
+The raw data files (transaction_native_seeder.parquet, transaction_token_seeder.parquet, seed_labels.csv) should be placed in the dataset/raw_data/ directory.
+
+Running the Notebook
+Install Dependencies:
+Ensure all required libraries are installed. You can install them using:
+
+bash
+Copy
+pip install pandas numpy scikit-learn imbalanced-learn joblib
+Load the Data:
+The notebook assumes the data is stored in the dataset/raw_data/ directory. Modify the paths if necessary.
+
+Run the Cells:
+Execute the cells in order to load the data, preprocess it, train the models, and evaluate their performance.
+
+Save Predictions:
+After training and evaluating the models, the notebook saves the predictions for the test data to CSV files in the predictions/ directory.
+
+Results
+Random Forest: Achieved the best performance with an accuracy of 97.3% and an F1-score of 0.975 on the validation set.
+
+Logistic Regression: Achieved an accuracy of 81.2% and an F1-score of 0.872 on the validation set.
+
+Isolation Forest: Detected anomalies with a precision of 3.46% and a recall of 13.7%.
+
+The Random Forest model was selected as the best-performing model and was used to classify new addresses in the test dataset.
+
+Files
+Input Files:
+dataset/raw_data/transaction_native_seeder.parquet: Native ETH transaction data.
+dataset/raw_data/transaction_token_seeder.parquet: Token transaction data.
+dataset/raw_data/seed_labels.csv: Pre-labeled addresses (CEX/Bridge vs. others).
+
+Output Files:
+dataset/processed_data/train_data.csv: Processed training data.
+dataset/processed_data/native_test_data.csv: Processed test data for native transactions.
+dataset/processed_data/token_test_data.csv: Processed test data for token transactions.
+predictions/native_dataset_predictions.csv: Predictions for the native transaction test data.
